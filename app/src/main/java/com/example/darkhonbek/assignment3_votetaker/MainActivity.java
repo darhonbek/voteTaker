@@ -16,12 +16,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private static Context context;
 
     private Result result = null;
-    private String[] drinksArray;
-    private String[] foodArray;
+    private List<String> drinksList;
+    private List<String> foodList;
 
     private LinearLayout mainLinearLayout;
     private LinearLayout nameLinearLayout;
@@ -55,8 +63,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        drinksArray = new String[] { "Vodka", "Cola", "Fanta" };
-        foodArray = new String[] { "Shashlik", "Mashlik", "Kabob" };
+
+//        try {
+////            String drinksFileName = "liquids.txt";
+////            getStringFromFile(drinksFileName, drinksList);
+////
+////            String foodFileName = "foods.txt";
+////            getStringFromFile(foodFileName, foodList);
+////        } catch (Exception e) {
+////            e.printStackTrace();
+////        }
+
+        drinksList = new ArrayList<String>();
+        foodList = new ArrayList<String>();
+
+        drinksList.add("Vodka");
+        drinksList.add("Cola");
+
+        foodList.add("Shashlik");
+        foodList.add("Mashlik");
+
     }
 
     private void initUI() {
@@ -231,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
         drinksSpinner.setLayoutParams(layoutParams);
         drinksSpinner.setBackgroundResource(android.R.drawable.spinner_background);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, drinksArray);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, drinksList.toArray());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         drinksSpinner.setAdapter(adapter);
     }
@@ -257,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
         foodSpinner.setLayoutParams(layoutParams);
         foodSpinner.setBackgroundResource(android.R.drawable.spinner_background);
 
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, foodArray);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, foodList.toArray());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         foodSpinner.setAdapter(adapter);
     }
@@ -335,5 +361,27 @@ public class MainActivity extends AppCompatActivity {
     public static int pixelsToDp(int pixels) {
         final float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) pixels * density);
+    }
+
+    // MARK: - File IO
+
+    public static String getStringFromFile (String filePath, List<String> list) throws Exception {
+        File fl = new File(filePath);
+        FileInputStream fin = new FileInputStream(fl);
+        String ret = convertStreamToString(fin, list);
+        fin.close();
+        return ret;
+    }
+
+    public static String convertStreamToString(InputStream is, List<String> list) throws Exception {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line = "";
+        while ((line = reader.readLine()) != null) {
+//            sb.append(line).append("\n");
+            list.add(line);
+        }
+        reader.close();
+        return sb.toString();
     }
 }
