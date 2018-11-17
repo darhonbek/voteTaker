@@ -13,6 +13,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +36,6 @@ public class ResultsActivity extends AppCompatActivity {
     private TextView resultsTextView;
     private Button clearVotesButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +48,16 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(mainLinearLayout);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        saveVotes();
+    }
+
     private void initData() {
         votes = new ArrayList<>();
-
+        loadVotes();
     }
 
     private void initUI() {
@@ -134,13 +148,44 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void clearResults() {
-        // FIXME - Clear Results
         resultsTextView.setText("");
         votes.clear();
+        saveVotes();
     }
 
     public static int pixelsToDp(int pixels) {
         final float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) pixels * density);
+    }
+
+    private void loadVotes() {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(
+                    new InputStreamReader(context.getAssets().open("votes.txt"), "UTF-8"));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                votes.add(Vote.getVoteFromString(line));
+            }
+            reader.close();
+        } catch (IOException e) {
+        }
+    }
+
+    private void saveVotes() {
+        BufferedWriter writer = null;
+        try {
+            String filePath = context.getFilesDir().getPath().toString() + "/votes.txt";
+            writer = new BufferedWriter(
+                    new FileWriter(filePath));
+            for(Vote vote: votes) {
+                writer.write(vote.toFile() + "\n");
+                Log.v("TEST", vote.toFile());
+            }
+            writer.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 }
