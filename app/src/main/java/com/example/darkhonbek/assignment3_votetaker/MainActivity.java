@@ -17,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,26 +61,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        drinksList = new ArrayList<>();
+        foodList = new ArrayList<>();
 
-//        try {
-////            String drinksFileName = "liquids.txt";
-////            getStringFromFile(drinksFileName, drinksList);
-////
-////            String foodFileName = "foods.txt";
-////            getStringFromFile(foodFileName, foodList);
-////        } catch (Exception e) {
-////            e.printStackTrace();
-////        }
+        String drinksFileName = "liquids.txt";
+        getStringFromFile(drinksFileName, drinksList);
 
-        drinksList = new ArrayList<String>();
-        foodList = new ArrayList<String>();
-
-        drinksList.add("Vodka");
-        drinksList.add("Cola");
-
-        foodList.add("Shashlik");
-        foodList.add("Mashlik");
-
+        String foodFileName = "foods.txt";
+        getStringFromFile(foodFileName, foodList);
     }
 
     private void initUI() {
@@ -365,23 +351,24 @@ public class MainActivity extends AppCompatActivity {
 
     // MARK: - File IO
 
-    public static String getStringFromFile (String filePath, List<String> list) throws Exception {
-        File fl = new File(filePath);
-        FileInputStream fin = new FileInputStream(fl);
-        String ret = convertStreamToString(fin, list);
-        fin.close();
-        return ret;
-    }
+    public static void getStringFromFile (String filePath, List<String> list) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(
+                    new InputStreamReader(context.getAssets().open(filePath), "UTF-8"));
 
-    public static String convertStreamToString(InputStream is, List<String> list) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-//            sb.append(line).append("\n");
-            list.add(line);
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                list.add(line);
+            }
+        } catch (IOException e) {
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                }
+            }
         }
-        reader.close();
-        return sb.toString();
     }
 }
