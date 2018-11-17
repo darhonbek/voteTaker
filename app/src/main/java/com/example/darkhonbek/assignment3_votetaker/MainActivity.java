@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,7 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static Context context;
 
-    private Result result = null;
+    private Vote vote = null;
     private List<String> drinksList;
     private List<String> foodList;
 
@@ -58,6 +59,19 @@ public class MainActivity extends AppCompatActivity {
         initUI();
 
         setContentView(mainLinearLayout);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        vote = null;
+        nameEditText.setText("");
+        lastNameEditText.setText("");
+        agreeRadioButton.setChecked(true);
+        disagreeRadioButton.setChecked(false);
+
+        getIntent().removeExtra("result");
     }
 
     private void initData() {
@@ -318,13 +332,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void voteButtonClicked(View view) {
         String name = nameEditText.getText().toString();
-        String lastName = lastNameEditText.getText().toString();
+        String lastname = lastNameEditText.getText().toString();
         Boolean isComing = agreeRadioButton.isChecked();
         String drink = drinksSpinner.getSelectedItem().toString();
         String food = foodSpinner.getSelectedItem().toString();
 
-        if (!name.isEmpty() && !lastName.isEmpty() && !drink.isEmpty() && !food.isEmpty()) {
-            result = new Result(name, lastName, isComing, drink, food);
+        if (!name.isEmpty() && !lastname.isEmpty() && !drink.isEmpty() && !food.isEmpty()) {
+            vote = new Vote(name, lastname, isComing, drink, food);
             Toast.makeText(this, "Vote submitted!", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Error.\nPlease, fill all the fields.", Toast.LENGTH_SHORT).show();
@@ -334,9 +348,9 @@ public class MainActivity extends AppCompatActivity {
     public void resultsButtonClicked(View view) {
         Intent intent = new Intent(this, ResultsActivity.class);
 
-        if(result != null) {
+        if(vote != null) {
             intent.putExtra("hasResult", true);
-            intent.putExtra("result", result.toString());
+            intent.putExtra("result", vote.toFile());
         } else {
             intent.putExtra("hasResult", false);
         }

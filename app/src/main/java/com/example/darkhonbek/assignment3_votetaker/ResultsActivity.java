@@ -6,16 +6,22 @@ import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResultsActivity extends AppCompatActivity {
     static String results = "";
 
     private static Context context;
+
+    private List<Vote> votes;
 
     private LinearLayout mainLinearLayout;
     private TextView titleTextView;
@@ -36,7 +42,8 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        // Read Vote results from file
+        votes = new ArrayList<>();
+
     }
 
     private void initUI() {
@@ -113,15 +120,23 @@ public class ResultsActivity extends AppCompatActivity {
         Boolean hasResult = intent.getBooleanExtra("hasResult", false);
 
         if(hasResult) {
-            String result = intent.getStringExtra("result");
-            results += result + "\n\n";
-            resultsTextView.setText(results);
+            String vote = intent.getStringExtra("result");
+            votes.add(Vote.getVoteFromString(vote));
         }
+
+        String votesText = "";
+
+        for (Vote vote: votes) {
+            votesText += vote.toString() + "\n";
+        }
+
+        resultsTextView.setText(votesText);
     }
 
     private void clearResults() {
         // FIXME - Clear Results
         resultsTextView.setText("");
+        votes.clear();
     }
 
     public static int pixelsToDp(int pixels) {
