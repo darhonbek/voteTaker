@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="app_name">Vote Taker</string>
+
+    <string-array name="drinks_array">
+        <item>Cola</item>
+        <item>Fanta</item>
+        <item>Sprite</item>
+        <item>Water</item>
+    </string-array>
+
+    <string-array name="foods_array">
+        <item>Fried Potatoes</item>
+        <item>Seafood</item>
+        <item>Rice</item>
+        <item>Pasta</item>
+    </string-array>
+
+</resources>
