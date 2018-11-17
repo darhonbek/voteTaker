@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
         mainLinearLayout.setClickable(true);
         mainLinearLayout.setFocusableInTouchMode(true);
         mainLinearLayout.setFocusable(true);
+        mainLinearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     private void initInnerLayouts() {
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         String text = "Will you come to the party?\nIf yes, what type of food and drink do you want?";
 
         questionTextView = new TextView(this);
+        questionTextView.setLayoutParams(layoutParams);
         questionTextView.setText(text);
     }
 
@@ -153,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.weight = 1;
 
         nameEditText = new EditText(this);
-        nameEditText.setGravity(Gravity.LEFT);
+        nameEditText.setLayoutParams(layoutParams);
         nameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         nameEditText.setBackgroundResource(android.R.drawable.edit_text);
         nameEditText.setHint("First Name");
@@ -165,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.weight = 1;
 
         lastNameEditText = new EditText(this);
-        lastNameEditText.setGravity(Gravity.RIGHT);
+        lastNameEditText.setLayoutParams(layoutParams);
         lastNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         lastNameEditText.setBackgroundResource(android.R.drawable.edit_text);
         lastNameEditText.setHint("Last Name");
@@ -216,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.weight = 1;
 
         drinksTextView = new TextView(this);
+        drinksTextView.setLayoutParams(layoutParams);
         drinksTextView.setText("Drinks");
     }
 
@@ -241,12 +244,13 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.weight = 1;
 
         foodTextView = new TextView(this);
+        foodTextView.setLayoutParams(layoutParams);
         foodTextView.setText("Food");
     }
 
     private void initFoodSpinner() {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, pixelsToDp(50));
+                LinearLayout.LayoutParams.MATCH_PARENT, pixelsToDp(50));
         layoutParams.weight = 1;
 
         foodSpinner = new Spinner(this);
@@ -265,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.setMargins(0,pixelsToDp(20),0,0);
 
         voteButton = new Button(this);
+        voteButton.setLayoutParams(layoutParams);
         voteButton.setGravity(Gravity.CENTER);
         voteButton.setAllCaps(false);
         voteButton.setText("Vote");
@@ -284,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         layoutParams.setMargins(0,pixelsToDp(20),0,0);
 
         resultsButton = new Button(this);
+        resultsButton.setLayoutParams(layoutParams);
         resultsButton.setGravity(Gravity.CENTER);
         resultsButton.setAllCaps(false);
         resultsButton.setText("Results");
